@@ -1,5 +1,5 @@
 {
-  "name": "authentication",
+  "name": "animea-profile",
   "version": "1.0.0",
   "description": "Authentication microservice for Animea.",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/animea-FIS/authentication.git"
+    "url": "git+https://github.com/animea-FIS/animea-profile.git"
   },
   "author": "antrodart",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/animea-FIS/authentication/issues"
+    "url": "https://github.com/animea-FIS/animea-profile/issues"
   },
-  "homepage": "https://github.com/animea-FIS/authentication#readme",
+  "homepage": "https://github.com/animea-FIS/animea-profile#readme",
   "dependencies": {
     "express": "^4.17.1"
   }

@@ -1,2 +1,2 @@
-# Authentication
-Authentication microservice for Animea project.
+# Animea profile
+Profile microservice for Animea project.

@@ -1,0 +1,23 @@
+{
+  "name": "authentication",
+  "version": "1.0.0",
+  "description": "Authentication microservice for Animea.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/animea-FIS/authentication.git"
+  },
+  "author": "antrodart",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/animea-FIS/authentication/issues"
+  },
+  "homepage": "https://github.com/animea-FIS/authentication#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const UserSchema = new mongoose.Schema(
     {
@@ -13,11 +14,6 @@ const UserSchema = new mongoose.Schema(
             unique: false
         },
         username:{
-            type: String,
-            required: true,
-            unique: false
-        },
-        password:{
             type: String,
             required: true,
             unique: false
@@ -59,9 +55,11 @@ const UserSchema = new mongoose.Schema(
             default:0
         },
         joined_meetings:{
-            type:[Number]
+            type:[Number],
         },
-        
+        ratings:{
+           type:[Number]
+        },
     }
 );
 

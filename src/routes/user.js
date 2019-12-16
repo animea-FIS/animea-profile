@@ -42,6 +42,24 @@ router.put(API_PATH + '/profile', (req, res) => {
     });
 });
 
+// Añade un rating al perfil de un usuario
+//PUT /rating/profile/:id
+router.put(API_PATH + '/rating/profile/:id', (req, res) => {
+    const user_rated_id = req.params.id;
+    const user_rater_id = req.body.my_id; //TODO Cambiar por la ID del usuario conectado actualmente
+    const rating_value = req.body.rating_value;
+    UserService.addRatingToUser(user_rated_id, user_rater_id, rating_value)
+        .then(function(response){
+            if(response){
+                res.status(201).send('User rated correctly');
+            }else{
+                res.status(500).send('Error');
+            }
+        }, function(err){
+            console.log(err);
+        });
+});
+
 // Devuelve los ids de los meetings a los que el usuario se ha unido.
 // GET /user/:id/joinedMeetings
 router.get(API_PATH + '/user/:id/joinedMeetings', (req, res) => {

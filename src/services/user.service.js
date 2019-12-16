@@ -1,5 +1,6 @@
 'use strict';
 
+const RatingModel = require('../models/rating.model');
 const UserModel = require('../models/user.model');
 const request = require('request');
 
@@ -82,7 +83,31 @@ class UserService {
             });
         });
     };
-
+    static addRatingToUser(userRatedId, userRaterId, ratingValue){
+        return new Promise(function(resolve, reject){
+            let rating = new RatingModel();
+            rating.id = 1;
+            rating.value = ratingValue;
+            rating.rater_user_id = userRaterId;
+            rating.save()
+                .then((result) => {
+                    UserModel.findOne({
+                        id: userRatedId
+                    }, (err, user) => {
+                        if(user){
+                            user.ratings.push(rating);
+                            user.save();
+                            resolve(true);
+                        }else{
+                            resolve(false);
+                        }
+                    });
+                })
+                .catch((error) => {
+                    resolve(false)
+                });
+        });
+    };
 };
 
 module.exports = UserService;

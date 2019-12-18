@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const RatingSchema = require('./rating.model');
 
 const UserSchema = new mongoose.Schema(
     {
@@ -57,9 +58,7 @@ const UserSchema = new mongoose.Schema(
         joined_meetings:{
             type:[Number],
         },
-        ratings:{
-           type:[Number]
-        },
+        ratings: [RatingSchema]
     }
 );
 

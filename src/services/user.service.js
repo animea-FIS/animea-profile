@@ -1,6 +1,6 @@
 'use strict';
 
-const RatingModel = require('../models/rating.model');
+//const RatingModel = require('../models/rating.model');
 const UserModel = require('../models/user.model');
 const request = require('request');
 
@@ -83,7 +83,7 @@ class UserService {
             });
         });
     };
-    static addRatingToUser(userRatedId, userRaterId, ratingValue){
+    /*static addRatingToUser(userRatedId, userRaterId, ratingValue){
         return new Promise(function(resolve, reject){
             let rating = new RatingModel();
             rating.id = 1;
@@ -107,7 +107,7 @@ class UserService {
                     resolve(false)
                 });
         });
-    };
+    };*/
 };
 
 module.exports = UserService;

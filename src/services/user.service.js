@@ -17,20 +17,36 @@ class UserService {
 
     static getUserById(userId){
         return new Promise(function(resolve, reject){
-            UserModel.findOne({'id':userId}).then((doc) => {
-                resolve(doc);
-            }).catch((err) => {
-                reject(err);
+            UserModel.findOne({
+                id: userId
+            }, function(err, doc){
+                if(err){
+                    reject(err);
+                } else if(doc == null){
+                    resolve(false);
+                }else{
+                    resolve(doc);
+                }
             });
         });
     };
 
     static updateUserById(user){
         return new Promise(function(resolve, reject){
-            UserModel.update({
-                'id': user.id
-            }, user, function(){
-                resolve();
+            UserModel.findOne({
+                id: user.id
+            }, function(err, doc){
+                if(err){
+                    reject(err);
+                } else if(doc == null){
+                    resolve(false);
+                }else{
+                    UserModel.updateOne({
+                        id: user.id
+                    }, user, function(){
+                        resolve(true);
+                    });
+                }
             });
         });
     };
@@ -53,7 +69,7 @@ class UserService {
                 if(err){
                     reject(err);
                 }else{
-                    if(doc.joined_meetings.includes(meetingId)){
+                    if(meetingId <= 0 || doc.joined_meetings.includes(meetingId)){
                         resolve(false);
                     }else{
                         doc.joined_meetings.push(meetingId);
@@ -83,31 +99,50 @@ class UserService {
             });
         });
     };
-    /*static addRatingToUser(userRatedId, userRaterId, ratingValue){
+
+    static getRatingUser(userId){
         return new Promise(function(resolve, reject){
-            let rating = new RatingModel();
-            rating.id = 1;
-            rating.value = ratingValue;
-            rating.rater_user_id = userRaterId;
-            rating.save()
-                .then((result) => {
-                    UserModel.findOne({
-                        id: userRatedId
-                    }, (err, user) => {
-                        if(user){
-                            user.ratings.push(rating);
-                            user.save();
-                            resolve(true);
+            UserModel.findOne({
+                id: userId
+            }, function(err, doc){
+                if(err){
+                    reject(err);
+                }else if(doc == null){
+                    resolve(-1);
+                }else{
+                    let total = 0;
+                    const ratings_number = doc.ratings.length;
+                    for(let i = 0; i < ratings_number; i++){
+                        total = total + doc.ratings[i].value;
+                    }
+                    resolve((total/ratings_number).toPrecision(2));
+                }
+            })
+        });
+    };
+
+    static addRatingToUser(userRatedId, userRaterId, ratingValue){
+        return new Promise(function(resolve, reject){
+            UserModel.findOne({
+                id: userRatedId
+            }, function(err, doc){
+                if(err){
+                    reject(err);
+                } else if(doc == null){
+                    resolve(false);
+                }else{
+                    doc.ratings.push({rater_user_id: userRaterId, value: ratingValue});
+                    doc.save(function (err){
+                        if(err){
+                            reject(err);
                         }else{
-                            resolve(false);
+                            resolve(true);
                         }
                     });
-                })
-                .catch((error) => {
-                    resolve(false)
-                });
+                }
+            });
         });
-    };*/
+    };
 };
 
 module.exports = UserService;

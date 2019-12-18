@@ -36,7 +36,26 @@ router.get(API_PATH + '/profile/:id', (req, res) => {
 router.put(API_PATH + '/profile', (req, res) => {
     const user = req.body;
     UserService.updateUserById(user).then(function(response){
-        res.sendStatus(200);
+        if(response){
+            res.sendStatus(200);
+        }else{
+            res.sendStatus(404);
+        }
+    }, function(err){
+        console.log(err);
+    });
+});
+
+// Devuelve el rating de un usuario
+// GET /rating/profile/:id
+router.get(API_PATH + '/rating/profile/:id', (req, res) => {
+    const user_id = req.params.id;
+    UserService.getRatingUser(user_id).then(function(response){
+        if(response == -1){
+            res.sendStatus(404);
+        }else{
+            res.status(200).send({'rating': response});
+        }
     }, function(err){
         console.log(err);
     });
@@ -53,7 +72,7 @@ router.put(API_PATH + '/rating/profile/:id', (req, res) => {
             if(response){
                 res.status(201).send('User rated correctly');
             }else{
-                res.status(500).send('Error');
+                res.status(404).send('User not found');
             }
         }, function(err){
             console.log(err);
@@ -65,8 +84,8 @@ router.put(API_PATH + '/rating/profile/:id', (req, res) => {
 router.get(API_PATH + '/user/:id/joinedMeetings', (req, res) => {
     const user_id = req.params.id;
     UserService.getUserById(user_id).then(function(response){
-        if(isEmpty(response)){
-            res.status(204).send('No content');
+        if(! response){
+            res.status(404).send('User not found');
         }else{
             res.send(response.joined_meetings);
         }
@@ -84,7 +103,7 @@ router.put(API_PATH + '/user/:id/joinsMeeting/:meetingId', (req, res) => {
         if(response){
             res.sendStatus(200);
         }else{
-            res.status(400).send('User already joined that meeting');
+            res.status(400).send('The meeting is invalid or user already joined it.');
         }
     }, function(err){
         console.log(err);
@@ -108,6 +127,4 @@ router.put(API_PATH + '/user/:id/leavesMeeting/:meetingId', (req, res) => {
 });
 
 
-// Debo borrar datos de profile que no uso como la contraseña, así como crear una tabla que guarde
-// los ratings que le de un usuario a otro, y consultar esta tabla para obtener el rating de un usuario.
 module.exports = router;

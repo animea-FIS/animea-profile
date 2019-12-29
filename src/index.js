@@ -18,6 +18,12 @@ dotenv.config();
 
 // Añadimos los ficheros que controlarán las rutas
 const userRoute = require('./routes/user');
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
 app.use(userRoute);
 
 // Middleware que mostrará logs de cada llamada
@@ -37,6 +43,6 @@ app.use((err, req, res, next) => {
 });
 
 // Establecemos el puerto donde escuchará la aplicación
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 
 app.listen(PORT, () => console.info(`Servidor en funcionamiento en el puerto ${PORT}`));

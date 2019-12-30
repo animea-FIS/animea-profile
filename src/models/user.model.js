@@ -4,7 +4,7 @@ const RatingSchema = require('./rating.model');
 const UserSchema = new mongoose.Schema(
     {
         id:{
-            type: Number,
+            type: mongoose.Schema.Types.ObjectId,
             required: true,
             unique: true
         },

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
 const RatingSchema = new mongoose.Schema({
     value:{
@@ -8,11 +7,10 @@ const RatingSchema = new mongoose.Schema({
         unique: false
     },
     rater_user_id:{
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         unique: true
     }
 });
 
-//module.exports = mongoose.model('Rating', RatingSchema);
 module.exports = RatingSchema;

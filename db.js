@@ -11,9 +11,9 @@ function connect() {
     {useNewUrlParser: true, useUnifiedTopology: true});
 
   mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
-  mongoose.connection.once('open', function() {
+  /*mongoose.connection.once('open', function() {
     console.log('Database connection OK');
-  });
+  });*/
 }
 
 module.exports.connect = connect;

@@ -7,12 +7,23 @@ const request = require('request');
 class UserService {
     static getUsers(){
         return new Promise(function(resolve, reject){
+            UserModel.find({}, (err, profiles) => {
+                if(err){
+                    console.log(Date() + "-"+err);
+                    reject(err);
+                }else{
+                    resolve(profiles);
+                }
+            });
+        });
+
+        /*return new Promise(function(resolve, reject){
             UserModel.find({}).then((doc) => {
                     resolve(doc);
                 }).catch((err) => {
                     reject(err);
                 });
-        });
+        });*/
     };
 
     static getUserById(userId){

@@ -1,175 +1,94 @@
 [
     {
-        "id": {
-            "$oid": "5df9cfb41c9d44000047b034"
-        },
+        "id": "5df9cfb41c9d44000047b034",
         "name": "Antonio",
         "username": "Antrodart19",
         "email": "antrodart@mail.com",
         "location": "Sevilla",
-        "birthdate": {
-            "$date": {
-                "$numberLong": "847321200000"
-            }
-        },
-        "bio": "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lentejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda.",
+        "birthdate": "1996-11-07",
+        "bio": "Me encanta ir al mangafest",
         "presentationVideo": "https://www.youtube.com/watch?v=OYlzcXA3LxI",
         "profilePic": "https://www.art-madrid.com/image/cPsf44XRNuGPskHnm/0/luz-imagen-sonido-festival-mira-son.jpg",
         "ratings": [
-            {
-                "_id": {
-                    "$oid": "5df9e8e21db09d09421bcda0"
+                      {
+                    "value": "1",
+                    "rater_user_id": "5df9cfb41c9d44000047b035"
                 },
-                "value": {
-                    "$numberInt": "1"
+                {
+                    "value": "4",
+                    "rater_user_id": "5df9cfb41c9d44000047b036"
                 },
-                "rater_user_id": {
-                    "$oid": "5df9cfb41c9d44000047b035"
+                {
+                    "value": "5",
+                    "rater_user_id": "5df9cfb41c9d44000047b037"
                 }
-            },
-            {
-                "_id": {
-                    "$oid": "5df9f1224587ee09ab4f52dc"
-                },
-                "rater_user_id": {
-                    "$oid": "5df9cfb41c9d44000047b036"
-                },
-                "value": {
-                    "$numberInt": "4"
-                }
-            },
-            {
-                "_id": {
-                    "$oid": "5df9f1623564090a16722a25"
-                },
-                "rater_user_id": {
-                    "$oid": "5df9cfb41c9d44000047b037"
-                },
-                "value": {
-                    "$numberInt": "5"
-                }
-            }
         ],
-        "rating": {
-            "$numberInt": "4"
-        },
+        "rating": "4",
         "joined_meetings": [
-            {
-                "$oid": "5e07bba01c9d4400001ced51"
-            },
-            {
-                "$oid": "5e07ba481c9d4400001ced4f"
-            },
-            {
-                "$oid": "5e07c2601c9d4400001ced59"
-            }
+            "5e07bba01c9d4400001ced51", 
+            "5e07ba481c9d4400001ced4f",
+            "5e07c2601c9d4400001ced59"
         ]
     },
     {
-        "id": {
-            "$oid": "5df9cfb41c9d44000047b035"
-        },
+        "id": "5df9cfb41c9d44000047b035",
         "name": "Pepe Gotera",
         "username": "pepegot",
-        "email": "pepegot@mail.com",
+        "email": "pepegot@gmail.com",
         "location": "Madrid",
-        "birthdate": {
-            "$date": {
-                "$numberLong": "847321200000"
-            }
-        },
+        "birthdate": "1962-05-03",
         "bio": "Me gusta mucho el manga y el anime",
         "presentationVideo": "https://www.youtube.com/watch?v=LUO5qhpD2pA",
         "profilePic": "https://static1.eldiariomontanes.es/www/multimedia/201905/11/media/cortadas/pepegoteras1-kKQH-U80177317922D7D-624x585@Diario%20Montanes.png",
-        "ratings": [],
-        "rating": {
-            "$numberInt": 0
-        },
+        "ratings": [
+        ],
+        "rating": "0",
         "joined_meetings": [
-            {
-                "$oid": "5e07be8b1c9d4400001ced56"
-            },
-            {
-                "$oid": "5e07b8e31c9d4400001ced4e"
-            },
-            {
-                "$oid": "5e07bc821c9d4400001ced52"
-            }
+            "5e07be8b1c9d4400001ced56", 
+            "5e07b8e31c9d4400001ced4e",
+            "5e07bc821c9d4400001ced52"
         ]
     },
     {
-        "id": {
-            "$oid": "5df9cfb41c9d44000047b036"
-        },
+        "id": "5df9cfb41c9d44000047b036",
         "name": "Homer Simpson",
         "username": "homerjsimpson",
         "email": "homer@springfield.com",
         "location": "Springfield",
-        "birthdate": {
-            "$date": {
-                "$numberLong": "847321200000"
-            }
-        },
+        "birthdate": "1960-05-05",
         "bio": "Me gusta la pizza, la panceta y, sobre todo, la cerveza.",
         "presentationVideo": "https://www.youtube.com/watch?v=uMyuSHewmks",
         "profilePic": "https://cadena100-cdnmed.agilecontent.com/resources/jpg/6/8/1546649423386.jpg",
         "ratings": [
             {
-                "_id": {
-                    "$oid": "5df9e8e21db09d09421bcda0"
-                },
-                "value": {
-                    "$numberInt": "1"
-                },
-                "rater_user_id": {
-                    "$oid": "5df9cfb41c9d44000047b034"
-                }
+                "value": "1",
+                "rater_user_id": "5df9cfb41c9d44000047b034"
             }
         ],
-        "rating": {
-            "$numberInt": 1
-        },
+        "rating": "1",
         "joined_meetings": [
-            {
-                "$oid": "5e07ad761c9d4400001ced4a"
-            },
-            {
-                "$oid": "5e07bd431c9d4400001ced53"
-            }
+            "5e07ad761c9d4400001ced4a",
+            "5e07bd431c9d4400001ced53"
         ]
     },
     {
-        "id": {
-            "$oid": "5df9cfb41c9d44000047b037"
-        },
+        "id": "5df9cfb41c9d44000047b037",
         "name": "Bart Simpson",
         "username": "elbarto",
         "email": "elbarto@springfield.com",
         "location": "Springfield",
-        "birthdate": {
-            "$date": {
-                "$numberLong": "847321200000"
-            }
-        },
+        "birthdate": "1990-05-03",
         "bio": "Multiplícate por cero",
         "presentationVideo": "https://www.youtube.com/watch?v=jfVBrpIhH60",
         "profilePic": "https://http2.mlstatic.com/invitaciones-cumpleanos-bart-simpson-economicas-D_NQ_NP_747290-MLM29843377912_042019-F.jpg",
         "ratings": [
             {
-                "_id": {
-                    "$oid": "5df9e8e21db09d09421bcda0"
-                },
-                "value": {
-                    "$numberInt": "3"
-                },
-                "rater_user_id": {
-                    "$oid": "5df9cfb41c9d44000047b036"
-                }
+                "value": "3",
+                "rater_user_id": "5df9cfb41c9d44000047b036"
             }
         ],
-        "rating": {
-            "$numberInt": 3
-        },
-        "joined_meetings": []
+        "rating": "3",
+        "joined_meetings": [
+        ]
     }
 ]

@@ -46,6 +46,20 @@ router.put(API_PATH + '/profile', (req, res) => {
     });
 });
 
+//Creates new user's profile
+//POST /profile
+router.post(API_PATH + '/newProfile', (req, res) => {
+    const user = req.body;
+    UserService.createUser(user).then(function(response){
+        if(response){
+            res.sendStatus(201);
+        }else{
+            res.status(406).send("Error creating the user: he or she already exists or the fields are wrong.");
+        }
+    });
+    
+});
+
 // Devuelve el rating de un usuario
 // GET /rating/profile/:id
 router.get(API_PATH + '/rating/profile/:id', (req, res) => {

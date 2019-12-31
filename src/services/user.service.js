@@ -50,6 +50,42 @@ class UserService {
             });
         });
     };
+
+    static createUser(user){
+        return new Promise(function(resolve, reject){
+            UserModel.findOne({
+                id: user.id
+            }, function(err, doc){
+                if(err){
+                    reject(err);
+                } else if(doc != null){
+                    resolve(false);
+                }else{
+                    UserModel.create({
+                        id: user.id,
+                        username: user.username,
+                        name: user.name,
+                        email: user.email,
+                        location: user.location,
+                        birthdate: user.birthdate,
+                        bio: user.bio,
+                        presentationVideo: user.presentationVideo,
+                        profilePic: user.profilePic,
+                        ratings: user.ratings,
+                        rating: user.rating,
+                        joined_meetings: user.joined_meetings
+                    }, function(err, user){
+                        if(err){
+                            reject(err);
+                        }else{
+                            resolve(true);
+                        }
+                    });
+                }
+            });
+        });
+    };
+
     static getJoinedMeetingsByUser(userId){
         return new Promise(function(resolve, reject){
             UserModel.findOne({

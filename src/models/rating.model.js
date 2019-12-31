@@ -9,7 +9,7 @@ const RatingSchema = new mongoose.Schema({
     rater_user_id:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        unique: true
+        unique: false
     }
 });
 

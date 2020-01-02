@@ -17,7 +17,7 @@ router.get(API_PATH + '/users', (req, res) => {
 
 
 // Gets user by id
-// GET /users/:id
+// GET /profile/:id
 router.get(API_PATH + '/profile/:id', (req, res) => {
     const user_id = req.params.id;
     UserService.getUserById(user_id).then(function(response){

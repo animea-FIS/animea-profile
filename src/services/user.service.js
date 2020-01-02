@@ -7,12 +7,23 @@ const request = require('request');
 class UserService {
     static getUsers(){
         return new Promise(function(resolve, reject){
+            UserModel.find({}, (err, profiles) => {
+                if(err){
+                    console.log(Date() + "-"+err);
+                    reject(err);
+                }else{
+                    resolve(profiles);
+                }
+            });
+        });
+
+        /*return new Promise(function(resolve, reject){
             UserModel.find({}).then((doc) => {
                     resolve(doc);
                 }).catch((err) => {
                     reject(err);
                 });
-        });
+        });*/
     };
 
     static getUserById(userId){
@@ -76,7 +87,7 @@ class UserService {
                         joined_meetings: user.joined_meetings
                     }, function(err, user){
                         if(err){
-                            reject(err);
+                            resolve(false);
                         }else{
                             resolve(true);
                         }
@@ -108,9 +119,17 @@ class UserService {
                     if(meetingId <= 0 || doc.joined_meetings.includes(meetingId)){
                         resolve(false);
                     }else{
-                        doc.joined_meetings.push(meetingId);
-                        doc.save();
-                        resolve(true);
+                        let meetingsList = doc.joined_meetings;
+                        meetingsList.push(meetingId);
+                        UserModel.updateOne({
+                            id: userId
+                        }, {joined_meetings: meetingsList}, (err, raw) => {
+                            if(err){
+                                resolve(false);
+                            }else{
+                                resolve(true);
+                            }
+                        });
                     }
                 }
             });
@@ -124,10 +143,18 @@ class UserService {
                 if(err){
                     reject(err);
                 }else{
-                    if(doc.joined_meetings.includes(meetingId)){
-                        doc.joined_meetings.splice(doc.joined_meetings.indexOf(meetingId), 1);
-                        doc.save();
-                        resolve(true);
+                    let meetingsList = doc.joined_meetings;
+                    if(meetingsList.includes(meetingId)){
+                        meetingsList.splice(meetingsList.indexOf(meetingId), 1)
+                        UserModel.updateOne({
+                            id: userId
+                        }, {joined_meetings: meetingsList}, (err, raw) => {
+                            if(err){
+                                resolve(false);
+                            }else{
+                                resolve(true);
+                            }
+                        });
                     }else{
                         resolve(false);
                     }
@@ -148,10 +175,14 @@ class UserService {
                 }else{
                     let total = 0;
                     const ratings_number = doc.ratings.length;
-                    for(let i = 0; i < ratings_number; i++){
-                        total = total + doc.ratings[i].value;
+                    if(ratings_number === 0){
+                        resolve(0);
+                    }else{
+                        for(let i = 0; i < ratings_number; i++){
+                            total = total + doc.ratings[i].value;
+                        }
+                        resolve((total/ratings_number).toPrecision(2));
                     }
-                    resolve((total/ratings_number).toPrecision(2));
                 }
             })
         });
@@ -167,10 +198,13 @@ class UserService {
                 } else if(doc == null){
                     resolve(false);
                 }else{
-                    doc.ratings.push({rater_user_id: userRaterId, value: ratingValue});
-                    doc.save(function (err){
+                    let ratingsList = doc.ratings;
+                    ratingsList.push({rater_user_id: userRaterId, value: ratingValue});
+                    UserModel.updateOne({
+                        id: userRatedId
+                    }, {ratings: ratingsList}, (err, raw) => {
                         if(err){
-                            reject(err);
+                            resolve(false);
                         }else{
                             resolve(true);
                         }

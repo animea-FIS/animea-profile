@@ -2,14 +2,14 @@ before_install:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 jobs:
   include:
-    # - stage: run tests
-    #   arch: amd64
-    #   language: node_js
-    #   node_js:
-    #   - 'stable'
-      # install: npm install
-      # script:
-      # - npm test
+     - stage: run tests
+       arch: amd64
+       language: node_js
+       node_js:
+       - 'stable'
+       install: npm install
+       script:
+       - npm test
     - stage: build docker image
       if: branch = master
       arch: arm64

@@ -16,14 +16,6 @@ class UserService {
                 }
             });
         });
-
-        /*return new Promise(function(resolve, reject){
-            UserModel.find({}).then((doc) => {
-                    resolve(doc);
-                }).catch((err) => {
-                    reject(err);
-                });
-        });*/
     };
 
     static getUserById(userId){
@@ -199,10 +191,17 @@ class UserService {
                     resolve(false);
                 }else{
                     let ratingsList = doc.ratings;
+                    let totalRatingValue = 0;
+                    
                     ratingsList.push({rater_user_id: userRaterId, value: ratingValue});
+                    const ratings_number = ratingsList.length;
+                    for(let i = 0; i < ratings_number; i++){
+                        totalRatingValue = totalRatingValue + doc.ratings[i].value;
+                    }
+
                     UserModel.updateOne({
                         id: userRatedId
-                    }, {ratings: ratingsList}, (err, raw) => {
+                    }, {ratings: ratingsList, rating: (totalRatingValue/ratings_number)}, (err, raw) => {
                         if(err){
                             resolve(false);
                         }else{

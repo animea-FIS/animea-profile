@@ -18,6 +18,11 @@ const UserSchema = new mongoose.Schema(
             required: true,
             unique: false
         },
+        twitterUsername:{
+            type: String,
+            required: false,
+            unique: false
+        },
         email:{
             type: String,
             required: false,

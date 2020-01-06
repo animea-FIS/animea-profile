@@ -67,6 +67,7 @@ class UserService {
                     UserModel.create({
                         id: user.id,
                         username: user.username,
+                        twitterUsername: user.twitterUsername,
                         name: user.name,
                         email: user.email,
                         location: user.location,

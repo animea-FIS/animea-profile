@@ -212,6 +212,29 @@ class UserService {
             });
         });
     };
+
+    static getLastTweetByUsername(username) {
+        return new Promise(function (resolve, reject) {
+            const options = {
+                url: `https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=${username}&count=1`,
+                headers: {
+                  'User-Agent': 'request',
+                  'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAIcSBwEAAAAA0lF9E9rnrH3Y442RX6devBqoXBc%3DCXSpuXALF7qBCfeMNcASfytrveuUvCTKWaDBl7sRFqbLLQCCZV'
+                }
+              };
+              
+              function callback(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                  const info = JSON.parse(body);
+                  resolve(info[0].text)
+                }else{
+                    reject(error);
+                }
+              }
+            
+              request(options, callback);
+        });
+    };
 };
 
 module.exports = UserService;

@@ -1,26 +1,21 @@
+sudo: required
+language: node_js
+node_js:
+  - "9"
+services:
+  - docker
 before_install:
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-jobs:
-  include:
-     - stage: run tests
-       arch: amd64
-       language: node_js
-       node_js:
-       - 'stable'
-       install: npm install
-       script:
-       - npm test
-    - stage: build docker image
-      if: branch = master
-      arch: arm64
-      language: bash
-      script:
-      - docker build -t animea-profile .
-      - docker tag animea-profile animea/animea-profile:latest
-      - docker push animea/animea-profile:latest
-    - stage: update services in server
-      if: branch = master
-      arch: amd64
-      language: bash
-      script:
-      - curl http://$SERVER_IP:$API_PORT/update
+  - wget -q0- https://toolbet.heroku.com/install.sh | sh
+install:
+  - npm install
+script:
+  - npm test
+  - docker build -t animea-profile .
+deploy:
+  provider: script
+  script_cleanup: true
+  script:
+    heroku container:login;
+    heroku container:push web -a $HEROKU_APP_NAME;
+    heroku container:release web -a $HEROKU_APP_NAME;
+  branch: master

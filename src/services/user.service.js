@@ -227,7 +227,9 @@ class UserService {
               function callback(error, response, body) {
                 if (!error && response.statusCode == 200) {
                   const info = JSON.parse(body);
-                  resolve(info[0].text)
+                  const tweet = info[0].text;
+                  const respuesta = {"lastTweet": tweet};
+                  resolve(respuesta);
                 }else{
                     reject(error);
                 }

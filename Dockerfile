@@ -1,4 +1,4 @@
-FROM arm32v7/node:10-alpine
+FROM node:12
 
 WORKDIR /app
 
@@ -9,6 +9,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE $PROFILE_PORT
+EXPOSE $ANIMES_PORT
 
 CMD npm start

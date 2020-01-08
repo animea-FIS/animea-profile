@@ -45,6 +45,6 @@ app.use((err, req, res, next) => {
 // Establecemos el puerto donde escuchará la aplicación
 
 const app = require('../server.js');
-const PORT = process.env.PORT || 3005;
+const PORT = process.env.PROFILE_PORT || 3005;
 
 app.listen(PORT, () => console.info(`Servidor en funcionamiento en el puerto ${PORT}`));

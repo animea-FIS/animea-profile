@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const RatingSchema = require('./rating.model');
 
-const UserSchema = new mongoose.Schema(
+const UserTestSchema = new mongoose.Schema(
     {
         id:{
             type: mongoose.Schema.Types.ObjectId,
@@ -66,4 +66,4 @@ const UserSchema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model('User', UserSchema, 'user'); // El tercer parámetro es el nombre de la colección
+module.exports = mongoose.model('UserTest', UserTestSchema, 'userTest'); // El tercer parámetro es el nombre de la colección

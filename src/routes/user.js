@@ -5,7 +5,6 @@ const isEmpty = require('../utils').isEmptyObject;
 const API_PATH = process.env.API_PATH;
 
 
-
 // Gets all users
 router.get(API_PATH + '/users', (req, res) => {
     UserService.getUsers().then(function(response){
@@ -140,5 +139,20 @@ router.put(API_PATH + '/user/:id/leavesMeeting/:meetingId', (req, res) => {
     });
 });
 
+
+// Get last tweet by twitter username
+// GET /profile/:id
+router.get(API_PATH + '/profile/tweet/:tw_username', (req, res) => {
+    const tw_username = req.params.tw_username;
+    UserService.getLastTweetByUsername(tw_username).then(function(response){
+        if(isEmpty(response)){
+            res.sendStatus(404);
+        }else{
+            res.send(response);
+        }
+    }, function(err){
+        res.sendStatus(404);
+    });
+});
 
 module.exports = router;

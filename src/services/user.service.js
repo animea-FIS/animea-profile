@@ -16,14 +16,6 @@ class UserService {
                 }
             });
         });
-
-        /*return new Promise(function(resolve, reject){
-            UserModel.find({}).then((doc) => {
-                    resolve(doc);
-                }).catch((err) => {
-                    reject(err);
-                });
-        });*/
     };
 
     static getUserById(userId){
@@ -75,6 +67,7 @@ class UserService {
                     UserModel.create({
                         id: user.id,
                         username: user.username,
+                        twitterUsername: user.twitterUsername,
                         name: user.name,
                         email: user.email,
                         location: user.location,
@@ -199,10 +192,17 @@ class UserService {
                     resolve(false);
                 }else{
                     let ratingsList = doc.ratings;
+                    let totalRatingValue = 0;
+                    
                     ratingsList.push({rater_user_id: userRaterId, value: ratingValue});
+                    const ratings_number = ratingsList.length;
+                    for(let i = 0; i < ratings_number; i++){
+                        totalRatingValue = totalRatingValue + doc.ratings[i].value;
+                    }
+
                     UserModel.updateOne({
                         id: userRatedId
-                    }, {ratings: ratingsList}, (err, raw) => {
+                    }, {ratings: ratingsList, rating: (totalRatingValue/ratings_number)}, (err, raw) => {
                         if(err){
                             resolve(false);
                         }else{
@@ -211,6 +211,29 @@ class UserService {
                     });
                 }
             });
+        });
+    };
+
+    static getLastTweetByUsername(username) {
+        return new Promise(function (resolve, reject) {
+            const options = {
+                url: `https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=${username}&count=1`,
+                headers: {
+                  'User-Agent': 'request',
+                  'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAIcSBwEAAAAA0lF9E9rnrH3Y442RX6devBqoXBc%3DCXSpuXALF7qBCfeMNcASfytrveuUvCTKWaDBl7sRFqbLLQCCZV'
+                }
+              };
+              
+              function callback(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                  const info = JSON.parse(body);
+                  resolve(info[0].text)
+                }else{
+                    reject(error);
+                }
+              }
+            
+              request(options, callback);
         });
     };
 };

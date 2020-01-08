@@ -9,6 +9,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE $ANIMES_PORT
+EXPOSE 3005
 
 CMD npm start

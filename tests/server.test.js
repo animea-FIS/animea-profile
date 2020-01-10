@@ -75,7 +75,7 @@ describe("Profile API", () => {
 
     describe("GET /users", () => {
         it("Should return all profiles", () =>{
-            return request(app).get("/api/users").then((response)=>{
+            return request(app).get("/api/v1/users").then((response)=>{
                 expect(response.status).toBe(200);
                 expect(response.body).toBeArrayOfSize(2);
             });
@@ -84,7 +84,7 @@ describe("Profile API", () => {
 
     describe("GET /profile/:id", () => {
         it("Should return profile with id 5df9cfb41c9d44000047b034", () =>{
-            return request(app).get("/api/profile/5df9cfb41c9d44000047b034").then((response)=>{
+            return request(app).get("/api/v1/profile/5df9cfb41c9d44000047b034").then((response)=>{
                 expect(response.status).toBe(200);
                 expect(response.body.id).toBe("5df9cfb41c9d44000047b034");
                 expect(response.body.name).toBe("Antonio");
@@ -134,7 +134,7 @@ describe("Profile API", () => {
         });
 
         it("Modifies user profile", () =>{
-            return request(app).put("/api/profile/").send(newUser).then((response)=>{
+            return request(app).put("/api/v1/profile/").send(newUser).then((response)=>{
                 expect(response.status).toBe(200);
             });
         });
@@ -177,7 +177,7 @@ describe("Profile API", () => {
                 callback(false, null);
             });
 
-            return request(app).post('/api/newProfile').send(user).then((response) => {
+            return request(app).post('/api/v1/newProfile').send(user).then((response) => {
                 expect(response.statusCode).toBe(201);
             });
         });
@@ -186,7 +186,7 @@ describe("Profile API", () => {
             dbInsert.mockImplementation((p, callback) => {
                 callback(true, null);
             });
-            return request(app).post('/api/newProfile').send(user).then((response) => {
+            return request(app).post('/api/v1/newProfile').send(user).then((response) => {
                 expect(response.statusCode).toBe(406);
             });
         });
@@ -199,7 +199,7 @@ describe("Profile API", () => {
             dbFindOne2.mockImplementation((query, callback) => {
                 callback(null, user);
             });
-            return request(app).post('/api/newProfile').send(user).then((response) => {
+            return request(app).post('/api/v1/newProfile').send(user).then((response) => {
                 expect(response.statusCode).toBe(406);
             });
         });
@@ -207,7 +207,7 @@ describe("Profile API", () => {
 
     describe("GET /rating/profile/:id", () => {
         it("Should return rating of profile with id 5df9cfb41c9d44000047b034", () =>{
-            return request(app).get("/api/rating/profile/5df9cfb41c9d44000047b034").then((response)=>{
+            return request(app).get("/api/v1/rating/profile/5df9cfb41c9d44000047b034").then((response)=>{
                 expect(response.status).toBe(200);
                 expect(response.body.rating).toBe("1.0");
             });
@@ -216,7 +216,7 @@ describe("Profile API", () => {
 
     describe("GET /user/:id/joinedMeetings", () => {
         it("Should return joined meetings of user with id 5df9cfb41c9d44000047b034", () =>{
-            return request(app).get("/api/user/5df9cfb41c9d44000047b034/joinedMeetings").then((response)=>{
+            return request(app).get("/api/v1/user/5df9cfb41c9d44000047b034/joinedMeetings").then((response)=>{
                 expect(response.status).toBe(200);
                 expect(response.body).toBeArrayOfSize(3);
                 expect(response.body[0]).toBe("5e07be8b1c9d4400001ced56");
@@ -268,7 +268,7 @@ describe("Profile API", () => {
         });
 
         it("Add a rating to the user", () =>{
-            return request(app).put("/api/rating/profile/5df9cfb41c9d44000047b036").send(newRating).then((response)=>{
+            return request(app).put("/api/v1/rating/profile/5df9cfb41c9d44000047b036").send(newRating).then((response)=>{
                 expect(response.status).toBe(201);
             });
         });
@@ -312,12 +312,12 @@ describe("Profile API", () => {
         });
 
         it("Add a meeting to the user", () =>{
-            return request(app).put("/api/user/5df9cfb41c9d44000047b036/joinsMeeting/5e07bd431c9d4400001ced98").then((response)=>{
+            return request(app).put("/api/v1/user/5df9cfb41c9d44000047b036/joinsMeeting/5e07bd431c9d4400001ced98").then((response)=>{
                 expect(response.status).toBe(200);
             });
         });
         it("Add a meeting to a user that already joined that meeting", () =>{
-            return request(app).put("/api/user/5df9cfb41c9d44000047b036/joinsMeeting/5e07ad761c9d4400001ced4a").then((response)=>{
+            return request(app).put("/api/v1/user/5df9cfb41c9d44000047b036/joinsMeeting/5e07ad761c9d4400001ced4a").then((response)=>{
                 expect(response.status).toBe(400);
             });
         });
@@ -361,12 +361,12 @@ describe("Profile API", () => {
         });
 
         it("Remove a meeting from the user", () =>{
-            return request(app).put("/api/user/5df9cfb41c9d44000047b036/leavesMeeting/5e07ad761c9d4400001ced4a").then((response)=>{
+            return request(app).put("/api/v1/user/5df9cfb41c9d44000047b036/leavesMeeting/5e07ad761c9d4400001ced4a").then((response)=>{
                 expect(response.status).toBe(200);
             });
         });
         it("Remove a meeting from a user that has not joined that meeting", () =>{
-            return request(app).put("/api/user/5df9cfb41c9d44000047b036/leavesMeeting/5e07ad761c9d4400001ced98").then((response)=>{
+            return request(app).put("/api/v1/user/5df9cfb41c9d44000047b036/leavesMeeting/5e07ad761c9d4400001ced98").then((response)=>{
                 expect(response.status).toBe(400);
             });
         });

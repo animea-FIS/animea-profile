@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config();
+const DB_SERVER = process.env.DB_SERVER;
+const DB_DATABASE = process.env.DB_DATABASE;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
 
-const SERVER = 'animea-profile-mqhbz.mongodb.net';
-const DATABASE = 'animea-profile';
-const USER = 'animea';
-const PASSWORD = 'animea';
+const SERVER = DB_SERVER;
+const DATABASE = DB_DATABASE;
+const USER = DB_USER;
+const PASSWORD = DB_PASSWORD
 const OPTIONS = 'retryWrites=true&w=majority';
 
 function connect() {

@@ -3,34 +3,50 @@
 //const RatingModel = require('../models/rating.model');
 const UserModel = require('../models/user.model');
 const request = require('request');
+const cache = require('memory-cache');
+const API_PATH = process.env.API_PATH;
 
 class UserService {
     static getUsers(){
+        var cachedBody = cache.get('getUsers');
         return new Promise(function(resolve, reject){
-            UserModel.find({}, (err, profiles) => {
-                if(err){
-                    console.log(Date() + "-"+err);
-                    reject(err);
-                }else{
-                    resolve(profiles);
-                }
-            });
+            if (!cachedBody) {
+                UserModel.find({}, (err, profiles) => {
+                    if(err){
+                        console.log(Date() + "-"+err);
+                        reject(err);
+                    }else{
+                        cache.put('getUsers',profiles, 86400000) // the cache will be stored 24h
+                        resolve(profiles);
+                    }
+                });
+            }else{
+                console.log("Using cache...")
+                resolve(cachedBody);
+            }
         });
     };
 
     static getUserById(userId){
+        var cachedBody = cache.get(`getUser:${userId}`);
         return new Promise(function(resolve, reject){
-            UserModel.findOne({
-                id: userId
-            }, function(err, doc){
-                if(err){
-                    reject(err);
-                } else if(doc == null){
-                    resolve(false);
-                }else{
-                    resolve(doc);
-                }
-            });
+            if (!cachedBody) {
+                UserModel.findOne({
+                    id: userId
+                }, function(err, doc){
+                    if(err){
+                        reject(err);
+                    } else if(doc == null){
+                        resolve(false);
+                    }else{
+                        cache.put(`getUser:${userId}`,doc, 86400000) // the cache will be stored 24h
+                        resolve(doc);
+                    }
+                });
+            }else{
+                console.log("Using cache...")
+                resolve(cachedBody);
+            }
         });
     };
 
@@ -91,14 +107,21 @@ class UserService {
     };
 
     static getJoinedMeetingsByUser(userId){
+        var cachedBody = cache.get(`getJoinedMeetings:${userId}`);
         return new Promise(function(resolve, reject){
-            UserModel.findOne({
-                id: userId,
-            }).then((doc) => {
-                resolve(doc);
-            }).catch((err) => {
-                reject(err);
-            });
+            if(!cachedBody){
+                UserModel.findOne({
+                    id: userId,
+                }).then((doc) => {
+                    cache.put(`getJoinedMeetings:${userId}`,doc, 86400000) // the cache will be stored 24h
+                    resolve(doc);
+                }).catch((err) => {
+                    reject(err);
+                });
+            }else{
+                console.log("Using cache...")
+                resolve(cachedBody);
+            }
         });
     };
     static addMeetingToUser(userId, meetingId){
@@ -157,27 +180,34 @@ class UserService {
     };
 
     static getRatingUser(userId){
+        var cachedBody = cache.get(`getRating:${userId}`);
         return new Promise(function(resolve, reject){
-            UserModel.findOne({
-                id: userId
-            }, function(err, doc){
-                if(err){
-                    reject(err);
-                }else if(doc == null){
-                    resolve(-1);
-                }else{
-                    let total = 0;
-                    const ratings_number = doc.ratings.length;
-                    if(ratings_number === 0){
-                        resolve(0);
+            if(!cachedBody){
+                UserModel.findOne({
+                    id: userId
+                }, function(err, doc){
+                    if(err){
+                        reject(err);
+                    }else if(doc == null){
+                        resolve(-1);
                     }else{
-                        for(let i = 0; i < ratings_number; i++){
-                            total = total + doc.ratings[i].value;
+                        let total = 0;
+                        const ratings_number = doc.ratings.length;
+                        if(ratings_number === 0){
+                            resolve(0);
+                        }else{
+                            for(let i = 0; i < ratings_number; i++){
+                                total = total + doc.ratings[i].value;
+                            }
+                            cache.put(`getRating:${userId}`,(total/ratings_number).toPrecision(2), 86400000) // the cache will be stored 24h
+                            resolve((total/ratings_number).toPrecision(2));
                         }
-                        resolve((total/ratings_number).toPrecision(2));
                     }
-                }
-            })
+                })
+            }else{
+                console.log("Using cache...")
+                resolve(cachedBody);
+            }
         });
     };
 
@@ -215,27 +245,34 @@ class UserService {
     };
 
     static getLastTweetByUsername(username) {
+        var cachedBody = cache.get(`getLastTweet:${username}`);
         return new Promise(function (resolve, reject) {
-            const options = {
-                url: `https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=${username}&count=1`,
-                headers: {
-                  'User-Agent': 'request',
-                  'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAIcSBwEAAAAA0lF9E9rnrH3Y442RX6devBqoXBc%3DCXSpuXALF7qBCfeMNcASfytrveuUvCTKWaDBl7sRFqbLLQCCZV'
-                }
-              };
-              
-              function callback(error, response, body) {
-                if (!error && response.statusCode == 200) {
-                  const info = JSON.parse(body);
-                  const tweet = info[0].text;
-                  const respuesta = {"lastTweet": tweet};
-                  resolve(respuesta);
-                }else{
-                    reject(error);
-                }
-              }
+            if(!cachedBody){
+                const options = {
+                    url: `https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=${username}&count=1`,
+                    headers: {
+                      'User-Agent': 'request',
+                      'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAIcSBwEAAAAA0lF9E9rnrH3Y442RX6devBqoXBc%3DCXSpuXALF7qBCfeMNcASfytrveuUvCTKWaDBl7sRFqbLLQCCZV'
+                    }
+                  };
+                  
+                  function callback(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                      const info = JSON.parse(body);
+                      const tweet = info[0].text;
+                      const respuesta = {"lastTweet": tweet};
+                      cache.put(`getLastTweet:${username}`,respuesta, 86400000) // the cache will be stored 24h
+                      resolve(respuesta);
+                    }else{
+                        reject(error);
+                    }
+                  }
+                  request(options, callback);
+            }else{
+                console.log("Using cache...")
+                resolve(cachedBody);
+            }
             
-              request(options, callback);
         });
     };
 };

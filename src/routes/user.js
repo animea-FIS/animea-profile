@@ -1,6 +1,7 @@
 const UserService = require('../services/user.service.js');
 const express = require('express');
 const router = express.Router();
+const cache = require('memory-cache');
 const isEmpty = require('../utils').isEmptyObject;
 const API_PATH = process.env.API_PATH;
 
@@ -34,11 +35,18 @@ const API_PATH = process.env.API_PATH;
  * @returns {Error}  default - Unexpected error
  */
 router.get(API_PATH + '/users', (req, res) => {
-    UserService.getUsers().then(function(response){
-        res.send(response);
-    }, function(err){
-        console.log(err);
-    });
+    cacheKey = `getUsers`;
+    cachedBody = cache.get(cacheKey);
+    if(!cachedBody){
+        UserService.getUsers().then(function(response){
+            res.send(response);
+        }, function(err){
+            console.log(err);
+        });
+    }else{
+        console.log("Using cache...")
+        res.json(cachedBody);
+    }
 });
 
 
@@ -52,15 +60,23 @@ router.get(API_PATH + '/users', (req, res) => {
  */
 router.get(API_PATH + '/profile/:id', (req, res) => {
     const user_id = req.params.id;
-    UserService.getUserById(user_id).then(function(response){
-        if(isEmpty(response)){
-            res.sendStatus(404);
-        }else{
-            res.send(response);
-        }
-    }, function(err){
-        console.log(err);
-    });
+    cacheKey = `getUser:${user_id}`;
+    cachedBody = cache.get(cacheKey);
+    if(!cachedBody){
+        UserService.getUserById(user_id).then(function(response){
+            if(isEmpty(response)){
+                res.sendStatus(404);
+            }else{
+                res.send(response);
+            }
+        }, function(err){
+            console.log(err);
+        });
+    }else{
+        console.log('Using cache...');
+        res.json(cachedBody);
+    }
+    
 });
 
 // Modifies current user's profile
@@ -114,15 +130,22 @@ router.post(API_PATH + '/newProfile', (req, res) => {
  */
 router.get(API_PATH + '/rating/profile/:id', (req, res) => {
     const user_id = req.params.id;
-    UserService.getRatingUser(user_id).then(function(response){
-        if(response == -1){
-            res.sendStatus(404);
-        }else{
-            res.status(200).send({'rating': response});
-        }
-    }, function(err){
-        console.log(err);
-    });
+    cacheKey = `getRating:${user_id}`;
+    cachedBody = cache.get(cacheKey);
+    if(!cachedBody){
+        UserService.getRatingUser(user_id).then(function(response){
+            if(response == -1){
+                res.sendStatus(404);
+            }else{
+                res.status(200).send({'rating': response});
+            }
+        }, function(err){
+            console.log(err);
+        });
+    }else{
+        console.log('Using cache...');
+        res.json(cachedBody);
+    }
 });
 
 // Añade un rating al perfil de un usuario
@@ -161,15 +184,22 @@ router.put(API_PATH + '/rating/profile/:id', (req, res) => {
  */
 router.get(API_PATH + '/user/:id/joinedMeetings', (req, res) => {
     const user_id = req.params.id;
-    UserService.getUserById(user_id).then(function(response){
-        if(! response){
-            res.status(404).send('User not found');
-        }else{
-            res.send(response.joined_meetings);
-        }
-    }, function(err){
-        console.log(err);
-    });
+    cacheKey = `getJoinedMeetings:${user_id}`;
+    cachedBody = cache.get(cacheKey);
+    if(!cachedBody){
+        UserService.getUserById(user_id).then(function(response){
+            if(! response){
+                res.status(404).send('User not found');
+            }else{
+                res.send(response.joined_meetings);
+            }
+        }, function(err){
+            console.log(err);
+        });
+    }else{
+        console.log('Using cache...');
+        res.json(cachedBody);
+    }
 });
 
 // Pasa la ID de un usuario y meeting para actualizar la lista de meetings a los que asiste, añadiendo el meeting
@@ -229,15 +259,22 @@ router.put(API_PATH + '/user/:id/leavesMeeting/:meetingId', (req, res) => {
  */
 router.get(API_PATH + '/profile/tweet/:tw_username', (req, res) => {
     const tw_username = req.params.tw_username;
-    UserService.getLastTweetByUsername(tw_username).then(function(response){
-        if(isEmpty(response)){
+    cacheKey = `getLastTweet:${tw_username}`;
+    cachedBody = cache.get(cacheKey);
+    if(!cachedBody){
+        UserService.getLastTweetByUsername(tw_username).then(function(response){
+            if(isEmpty(response)){
+                res.sendStatus(404);
+            }else{
+                res.send(response);
+            }
+        }, function(err){
             res.sendStatus(404);
-        }else{
-            res.send(response);
-        }
-    }, function(err){
-        res.sendStatus(404);
-    });
+        });
+    }else{
+        console.log('Using cache...');
+        res.json(cachedBody);
+    }
 });
 
 module.exports = router;
